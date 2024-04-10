@@ -8,8 +8,8 @@ import 'package:graduation_project/screens/add_book_form_screen.dart';
 import 'package:graduation_project/screens/book_details_screen.dart';
 import 'package:graduation_project/screens/chat_screen.dart';
 import 'package:graduation_project/screens/login_screen.dart';
-import 'package:graduation_project/screens/main_screen.dart';
-import 'package:graduation_project/screens/notifications_screen.dart';
+import 'package:graduation_project/screens/main_screens/main_screen.dart';
+import 'package:graduation_project/screens/main_screens/notifications_screen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/register_screen.dart';
 import 'package:graduation_project/screens/start_screen.dart';
@@ -42,10 +42,13 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.white,
-              primary: Colors.black,
-              secondary: Colors.black,
-              brightness: Brightness.light),
+            seedColor: const Color(0xFFB0C5A4),
+            // primaryContainer: const Color(0xFFD3E4FF),
+            // onPrimaryContainer: const Color(0xFF001C38),
+            // surface: const Color(0xFFF3F4F9),
+            // onSurface: const Color(0xFF001E2F),
+            brightness: Brightness.light,
+          ),
           textTheme: GoogleFonts.rubikTextTheme(),
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {
@@ -54,17 +57,19 @@ class MainApp extends StatelessWidget {
             },
           ),
         ),
-        // darkTheme: ThemeData(
-        //   colorScheme: ColorScheme.fromSeed(
-        //       seedColor: const Color(0xFF76ABAE), brightness: Brightness.dark),
-        //   textTheme: GoogleFonts.rubikTextTheme(),
-        //   pageTransitionsTheme: const PageTransitionsTheme(
-        //     builders: {
-        //       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-        //       TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-        //     },
-        //   ),
-        // ),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            brightness: Brightness.dark,
+          ),
+          textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            },
+          ),
+        ),
         routes: {
           '/main': (context) => const MainScreen(),
           '/login': (context) => const LoginScreen(),

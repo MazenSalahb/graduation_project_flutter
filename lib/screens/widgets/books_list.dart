@@ -12,7 +12,7 @@ class BooksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.only(left: 20),
       height: 190,
       child: FutureBuilder<List<BookModel>>(
         future: books,

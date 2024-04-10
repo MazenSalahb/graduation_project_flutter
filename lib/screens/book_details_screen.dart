@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:graduation_project/constants/colors.dart';
+// import 'package:graduation_project/constants/colors.dart';
 import 'package:graduation_project/models/book_model.dart';
 import 'package:graduation_project/models/review_model.dart';
 import 'package:graduation_project/services/apis/reviews_service.dart';
@@ -51,7 +51,7 @@ class BookDetailsScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   // fontWeight: FontWeight.bold,
-                  color: paragraphColor,
+                  // color: paragraphColor,
                 ),
               ),
               //* END Book Description
@@ -164,7 +164,7 @@ class _ReviewFormDialogState extends State<ReviewFormDialog> {
               hintText: 'Write your review here',
               border: OutlineInputBorder(),
             ),
-            maxLines: 5,
+            maxLines: 3,
           ),
         ],
       ),
@@ -251,7 +251,7 @@ class ContactButtons extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.green,
             ),
             onPressed: () {
               Navigator.of(context).pushNamed('/chat', arguments: {
@@ -405,7 +405,7 @@ class BookDetailsWidget extends StatelessWidget {
               Text(
                   'for ${arguments.availability!}: ${arguments.availability == "sale" ? "${arguments.price}EGP" : "🔄"}'),
               const SizedBox(height: 4),
-              Text('Posted by: ${arguments.user!.name}',
+              Text('Posted by: ${arguments.user?.name ?? 'Unknown'}',
                   maxLines: 1, overflow: TextOverflow.ellipsis),
               const SizedBox(height: 4),
               Text(

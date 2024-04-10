@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/screens/add_book_screen.dart';
-import 'package:graduation_project/screens/user_chats_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:graduation_project/screens/main_screens/add_book_screen.dart';
+import 'package:graduation_project/screens/main_screens/user_chats_screen.dart';
 
-import '../constants/colors.dart';
 import 'home_screen.dart';
 import 'notifications_screen.dart';
 
@@ -28,60 +28,49 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        height: 70,
-        surfaceTintColor: Colors.transparent,
+        // labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        height: 90,
+        // surfaceTintColor: Colors.transparent,
         onDestinationSelected: (int index) {
           setState(() {
             selectedIndex = index;
           });
         },
-        indicatorColor: iconRed,
+        // indicatorColor: iconRed,
         indicatorShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         destinations: const [
           NavigationDestination(
-            icon: Icon(
-              Icons.home_rounded,
+            icon: FaIcon(
+              FontAwesomeIcons.house,
+              size: 20,
             ),
-            selectedIcon: Icon(
-              Icons.home_rounded,
-              color: Colors.white,
-            ),
+            selectedIcon: FaIcon(FontAwesomeIcons.house, size: 20),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.groups_3_rounded),
-            selectedIcon: Icon(
-              Icons.groups_3_rounded,
-              color: Colors.white,
-            ),
+            icon: FaIcon(FontAwesomeIcons.userGroup, size: 20),
+            selectedIcon: FaIcon(FontAwesomeIcons.userGroup, size: 20),
             label: 'Community',
           ),
           NavigationDestination(
-            icon: Icon(Icons.add_rounded),
-            selectedIcon: Icon(
-              Icons.add_rounded,
-              color: Colors.white,
-            ),
+            icon: FaIcon(FontAwesomeIcons.plus, size: 20),
+            selectedIcon: FaIcon(FontAwesomeIcons.plus, size: 20),
             label: 'Add book',
           ),
           NavigationDestination(
-            icon: Icon(Icons.chat_rounded),
-            selectedIcon: Icon(
-              Icons.chat_rounded,
-              color: Colors.white,
-            ),
+            icon: FaIcon(FontAwesomeIcons.solidMessage, size: 20),
+            selectedIcon: FaIcon(FontAwesomeIcons.solidMessage, size: 20),
             label: 'Chats',
           ),
           NavigationDestination(
-            icon: Icon(Icons.notifications_rounded),
-            selectedIcon: Icon(
-              Icons.notifications_rounded,
-              color: Colors.white,
+            icon: FaIcon(
+              FontAwesomeIcons.solidBell,
+              size: 20,
             ),
-            label: 'Profile',
+            selectedIcon: FaIcon(FontAwesomeIcons.solidBell, size: 20),
+            label: 'Notifications',
           ),
         ],
       ),

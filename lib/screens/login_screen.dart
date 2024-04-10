@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/screens/widgets/primary_button.dart';
 import '../services/cubits/auth/auth_cubit.dart';
@@ -39,9 +40,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -55,9 +62,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),

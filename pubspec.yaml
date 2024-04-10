@@ -17,8 +17,10 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.5.0
   flutter_bloc: ^8.1.4
+  flutter_native_splash: ^2.4.0
   flutter_rating_bar: ^4.0.1
   flutter_svg: ^2.0.10+1
+  font_awesome_flutter: ^10.7.0
   google_fonts: ^6.2.1
   image_picker: ^1.0.7
   shared_preferences: ^2.2.2
@@ -32,3 +34,20 @@ flutter:
   uses-material-design: true
   assets:
     - assets/svg/
+
+# flutter_native_splash-development.yaml
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/bookdeal.png
+  # branding: assets/branding-development.png
+  # color_dark: "#fff"
+  # image_dark: assets/logo-development.png
+  # branding_dark: assets/branding-development.png
+
+  android_12:
+    image: assets/bookdeal.png
+    icon_background_color: "#ffffff"
+    # image_dark: assets/logo-development.png
+    # icon_background_color_dark: "#fff"
+
+  web: false

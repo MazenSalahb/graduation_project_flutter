@@ -4,9 +4,9 @@ import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/books_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 
-import '../models/book_model.dart';
-import '../services/cubits/auth/auth_cubit.dart';
-import 'widgets/primary_button.dart';
+import '../../models/book_model.dart';
+import '../../services/cubits/auth/auth_cubit.dart';
+import '../widgets/primary_button.dart';
 
 class AddBookScreen extends StatelessWidget {
   const AddBookScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
+// import '../../constants/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton(
@@ -16,10 +16,11 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        disabledBackgroundColor: paragraphColor,
+        // disabledBackgroundColor: paragraphColor,
         disabledForegroundColor: Colors.grey,
         minimumSize: const Size.fromHeight(55),
-        backgroundColor: primaryRed,
+        side: const BorderSide(color: Colors.black),
+        // backgroundColor: primaryRed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -28,7 +29,7 @@ class PrimaryButton extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          // color: Colors.white,
           fontSize: 20,
         ),
       ),

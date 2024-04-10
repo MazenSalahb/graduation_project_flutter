@@ -20,12 +20,20 @@ class ProfileAppBarWidget extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, '/profile');
               },
-              child: SvgPicture.network(
-                BlocProvider.of<AuthCubit>(context)
-                    .userData!
-                    .data!
-                    .profilePicture!,
-                width: 40,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                child: SvgPicture.network(
+                  BlocProvider.of<AuthCubit>(context)
+                      .userData!
+                      .data!
+                      .profilePicture!,
+                  width: 40,
+                ),
               ),
             ),
           );

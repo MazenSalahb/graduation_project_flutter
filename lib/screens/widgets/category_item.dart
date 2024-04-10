@@ -19,7 +19,11 @@ class CategoryItem extends StatelessWidget {
             height: MediaQuery.of(context).size.width * 0.80 / 4,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Color(int.parse('0xFF${category.color}')),
+              // color: Color(int.parse('0xFF${category.color}')),
+              color: Theme.of(context).colorScheme.surface,
+              border: Border.all(
+                color: Colors.black,
+              ),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(

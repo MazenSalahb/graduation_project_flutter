@@ -40,11 +40,18 @@ class BookWidget extends StatelessWidget {
               // Add your book item widgets here
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  book.image!,
-                  height: 140,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  child: Image.network(
+                    book.image!,
+                    height: 140,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               const SizedBox(height: 5),

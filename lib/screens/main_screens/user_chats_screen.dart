@@ -6,7 +6,7 @@ import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/chat_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 
-import '../services/cubits/auth/auth_cubit.dart';
+import '../../services/cubits/auth/auth_cubit.dart';
 
 class UserChatsScreen extends StatelessWidget {
   const UserChatsScreen({super.key});

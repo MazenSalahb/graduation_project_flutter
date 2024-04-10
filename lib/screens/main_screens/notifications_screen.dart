@@ -5,8 +5,8 @@ import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/notification_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 
-import '../models/notification_model.dart';
-import '../services/cubits/auth/auth_cubit.dart';
+import '../../models/notification_model.dart';
+import '../../services/cubits/auth/auth_cubit.dart';
 
 class NotificationsScreens extends StatelessWidget {
   const NotificationsScreens({super.key});

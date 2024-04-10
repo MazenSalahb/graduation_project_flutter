@@ -3,8 +3,8 @@ import 'package:graduation_project/screens/widgets/book_category.dart';
 import 'package:graduation_project/screens/widgets/books_list.dart';
 import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/books_service.dart';
-import 'widgets/categories_list.dart';
-import 'widgets/features_list.dart';
+import '../widgets/categories_list.dart';
+import '../widgets/features_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    // fillColor: Colors.grey[100],
                   ),
                 ),
               ),
@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const CategoriesList(),
+              const SizedBox(height: 10),
               //*End  Categories Section
               const FeaturesList(),
               // *END Feature Section

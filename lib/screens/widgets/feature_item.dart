@@ -6,13 +6,13 @@ class FeatureItem extends StatelessWidget {
     super.key,
     required this.title,
     required this.image,
-    required this.bgColor,
-    required this.textColor,
+    // required this.bgColor,
+    // required this.textColor,
   });
   final String title;
   final String image;
-  final Color bgColor;
-  final Color textColor;
+  // final Color bgColor;
+  // final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,12 @@ class FeatureItem extends StatelessWidget {
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
+          // color: bgColor,
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          )),
       child: Row(
         children: [
           Flexible(
@@ -33,7 +36,7 @@ class FeatureItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
           ),

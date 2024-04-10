@@ -36,7 +36,6 @@ class StartScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: Color(0xFF656565),
               ),
             ),
             PrimaryButton(
