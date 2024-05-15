@@ -63,38 +63,45 @@ class AuthProfileWidget extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SvgPicture.network(profileImage, height: 100, width: 100),
-              const SizedBox(height: 6),
+              SvgPicture.network(profileImage, height: 200, width: 200),
+              const SizedBox(height: 16),
               Text(
                 name,
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 15),
-              const Divider(
-                // Add a horizontal line
-                color: Colors.grey,
-                thickness: 2,
-              ),
-              const SizedBox(height: 15),
               ListTile(
                 leading: const Icon(Icons.person_outline),
                 title: const Text('Edit Profile'),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to the profile screen
                 },
               ),
+              Divider(
+                // Add a horizontal line
+                color: Colors.grey[300],
+                thickness: 2,
+              ),
               ListTile(
                 leading: const Icon(Icons.book_outlined),
                 title: const Text('Your Books'),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to the Books screen
                   Navigator.of(context).pushNamed('/your-books');
                 },
               ),
+              Divider(
+                // Add a horizontal line
+                color: Colors.grey[300],
+                thickness: 2,
+              ),
               ListTile(
                 leading: const Icon(Icons.logout_outlined),
                 title: const Text('Log Out'),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Logout user
                   context.read<AuthCubit>().logout();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/models/category_model.dart';
 import 'package:graduation_project/services/apis/category_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'category_item.dart';
 
@@ -18,8 +19,18 @@ class CategoriesList extends StatelessWidget {
         future: CategoryService().getCategories(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Shimmer.fromColors(
+                  baseColor: Theme.of(context).colorScheme.surface,
+                  highlightColor: Theme.of(context).colorScheme.surfaceVariant,
+                  child: CategoryItem(
+                    category: CategoryModel(id: 0, name: 'Loading...'),
+                  ),
+                );
+              },
             );
           } else if (snapshot.hasError) {
             return Center(

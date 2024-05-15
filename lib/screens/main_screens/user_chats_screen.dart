@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:graduation_project/models/chat_model.dart';
+import 'package:graduation_project/screens/widgets/please_login_widget.dart';
 import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/chat_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
@@ -20,8 +20,21 @@ class UserChatsScreen extends StatelessWidget {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                title: const Text('Chats'),
-                actions: const [ProfileAppBarWidget()],
+                toolbarHeight: 100,
+                centerTitle: true,
+                title: Image.asset(
+                  "assets/images/logo1.png",
+                  height: 100,
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/categories");
+                  },
+                  icon: const Icon(Icons.grid_view_rounded),
+                ),
+                actions: const [
+                  ProfileAppBarWidget(),
+                ],
                 bottom: const TabBar(
                   tabs: [
                     Tab(
@@ -42,20 +55,8 @@ class UserChatsScreen extends StatelessWidget {
             ),
           );
         } else {
-          return Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Please'),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/login');
-                  },
-                  child: const Text('Login'),
-                ),
-                const Text('to view your chats.')
-              ],
-            ),
+          return const PleaseLoginWidget(
+            message: 'view your chats',
           );
         }
       },
@@ -161,25 +162,7 @@ class BuyingChatsList extends StatelessWidget {
     return ListView.builder(
       itemCount: chats.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            chats[index].book!.title!,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text('with: ${chats[index].seller!.name}'),
-          leading: SvgPicture.network(
-            '${chats[index].seller!.profilePicture}',
-            width: 45,
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed('/chat', arguments: {
-              'sellerId': chats[index].seller!.id!,
-              'buyerId': BlocProvider.of<AuthCubit>(context).userData!.data!.id,
-              'bookId': chats[index].book!.id!,
-            });
-          },
-        );
+        return ChatWidget(chat: chats[index], isBuying: true);
       },
     );
   }
@@ -197,27 +180,89 @@ class SellingChatsList extends StatelessWidget {
     return ListView.builder(
       itemCount: chats.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            chats[index].book!.title!,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text('with: ${chats[index].buyer!.name}'),
-          leading: SvgPicture.network(
-            '${chats[index].buyer!.profilePicture}',
-            width: 45,
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed('/chat', arguments: {
-              'sellerId':
-                  BlocProvider.of<AuthCubit>(context).userData!.data!.id,
-              'buyerId': chats[index].buyer!.id!,
-              'bookId': chats[index].book!.id!,
-            });
-          },
-        );
+        return ChatWidget(chat: chats[index], isBuying: false);
       },
+    );
+  }
+}
+
+class ChatWidget extends StatelessWidget {
+  const ChatWidget({
+    super.key,
+    required this.chat,
+    required this.isBuying,
+  });
+
+  final ChatModel chat;
+  final bool isBuying;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/chat', arguments: {
+          'sellerId': chat.seller!.id!,
+          'buyerId': BlocProvider.of<AuthCubit>(context).userData!.data!.id,
+          'bookId': chat.book!.id!,
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        width: double.infinity,
+        height: 200,
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                chat.book!.image!,
+                height: 160,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                height: 130,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Text(
+                            chat.book!.title!,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(chat.createdAt!),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(chat.book!.author!),
+                    const SizedBox(height: 10),
+                    Text(chat.book!.availability == 'sale'
+                        ? '${chat.book!.price!}EGP'
+                        : '🤝'),
+                    const SizedBox(height: 10),
+                    Text(
+                        'with: ${isBuying ? chat.seller!.name! : chat.buyer!.name!}'),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

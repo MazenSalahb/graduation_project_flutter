@@ -90,6 +90,12 @@ class _ChatState extends State<Chat> {
           ),
         ),
         MessageBar(
+          messageBarColor: Theme.of(context).colorScheme.secondaryContainer,
+          sendButtonColor: Theme.of(context).colorScheme.tertiary,
+          messageBarHintStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodySmall!.color,
+          ),
+          messageBarHintText: "Type a message...",
           onSend: (p0) async {
             await ChatService().sendMessage(
               message: p0,
@@ -135,15 +141,13 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BubbleNormal(
-        text: message.content!,
-        isSender: message.senderId ==
-            BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
-        color: message.senderId ==
-                BlocProvider.of<AuthCubit>(context).userData!.data!.id!
-            ? Colors.blue
-            : Colors.grey,
-        textStyle: const TextStyle(
-          color: Colors.white,
-        ));
+      text: message.content!,
+      isSender: message.senderId ==
+          BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
+      color: message.senderId ==
+              BlocProvider.of<AuthCubit>(context).userData!.data!.id!
+          ? Theme.of(context).colorScheme.primaryContainer
+          : Theme.of(context).colorScheme.secondaryContainer,
+    );
   }
 }

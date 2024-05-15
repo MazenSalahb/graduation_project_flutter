@@ -17,12 +17,13 @@ class FeatureItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // width: MediaQuery.of(context).size.width * 0.80,
       alignment: Alignment.center,
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
           // color: bgColor,
-          color: Theme.of(context).colorScheme.primaryContainer,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: Theme.of(context).colorScheme.onPrimaryContainer,

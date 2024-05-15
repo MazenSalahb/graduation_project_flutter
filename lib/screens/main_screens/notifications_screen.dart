@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
+import 'package:graduation_project/screens/widgets/app_bar.dart';
+import 'package:graduation_project/screens/widgets/please_login_widget.dart';
 import 'package:graduation_project/services/apis/notification_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 
@@ -14,9 +15,9 @@ class NotificationsScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        actions: const [ProfileAppBarWidget()],
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: AppBarWidget(),
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
@@ -31,6 +32,9 @@ class NotificationsScreens extends StatelessWidget {
                   if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
+                    if (snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No notifications'));
+                    }
                     return NotificationsList(
                       notifications: snapshot.data!,
                     );
@@ -43,20 +47,7 @@ class NotificationsScreens extends StatelessWidget {
               },
             );
           } else {
-            return Center(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Please'),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/login');
-                  },
-                  child: const Text('Login'),
-                ),
-                const Text('to view your notifications.')
-              ],
-            ));
+            return const PleaseLoginWidget(message: "view your notifications");
           }
         },
       ),

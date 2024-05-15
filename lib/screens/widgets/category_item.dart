@@ -22,7 +22,7 @@ class CategoryItem extends StatelessWidget {
               // color: Color(int.parse('0xFF${category.color}')),
               color: Theme.of(context).colorScheme.surface,
               border: Border.all(
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
               borderRadius: BorderRadius.circular(10),
             ),

@@ -17,7 +17,7 @@ class FeaturesList extends StatelessWidget {
         padEnds: false,
         scrollDirection: Axis.horizontal,
         controller: PageController(
-          viewportFraction: 0.9,
+          viewportFraction: 0.69,
         ),
         children: const [
           FeatureItem(

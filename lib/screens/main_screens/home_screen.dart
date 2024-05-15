@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/screens/widgets/app_bar.dart';
 import 'package:graduation_project/screens/widgets/book_category.dart';
 import 'package:graduation_project/screens/widgets/books_list.dart';
-import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/books_service.dart';
-import '../widgets/categories_list.dart';
-import '../widgets/features_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,11 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BookDeal'),
-        actions: const [
-          ProfileAppBarWidget(),
-        ],
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: AppBarWidget(),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -49,35 +45,39 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               //* END Search Section
               //*START Categories Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Categories", style: TextStyle(fontSize: 16)),
-                    TextButton(onPressed: () {}, child: const Text("See all"))
-                  ],
-                ),
-              ),
-              const CategoriesList(),
-              const SizedBox(height: 10),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       const Text("Categories", style: TextStyle(fontSize: 16)),
+              //       TextButton(onPressed: () {}, child: const Text("See all"))
+              //     ],
+              //   ),
+              // ),
+              // const CategoriesList(),
               //*End  Categories Section
-              const FeaturesList(),
-              // *END Feature Section
               // *Books Category
+              const SizedBox(
+                height: 20,
+              ),
               const BooksCategory(
-                title: "Books for sale",
+                title: "Books To Swap With",
+                isSwap: true,
               ),
               BooksList(
-                books: BooksServiceApi().getBooks(),
+                books: BooksServiceApi().getBooksForSwap(),
+                isSwapBook: true,
               ),
               // *END Books Category
               // *Books Category
               const BooksCategory(
-                title: "Books To Swap With",
+                title: "Books for sale",
+                isSwap: false,
               ),
               BooksList(
-                books: BooksServiceApi().getBooksForSwap(),
+                books: BooksServiceApi().getBooks(),
+                isSwapBook: false,
               ),
               // *END Books Category
             ],

@@ -34,11 +34,16 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
     required String location,
+    required String phone,
   }) async {
     emit(AuthLoading());
     // Perform login
     final bool success = await AuthService().register(
-        name: name, email: email, location: location, password: password);
+        name: name,
+        email: email,
+        location: location,
+        password: password,
+        phone: phone);
     if (!success) {
       emit(AuthError('Failed to register user'));
       return false;

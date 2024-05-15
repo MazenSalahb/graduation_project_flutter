@@ -26,11 +26,13 @@ class AuthService {
     }
   }
 
-  Future<bool> register(
-      {required String name,
-      required String email,
-      required String location,
-      required String password}) async {
+  Future<bool> register({
+    required String name,
+    required String email,
+    required String location,
+    required String password,
+    required String phone,
+  }) async {
     try {
       final res = await dio.post(
         '$baseUrl/signup',
@@ -38,11 +40,13 @@ class AuthService {
           'name': name,
           'email': email,
           'location': location,
+          'phone': phone,
           'password': password,
         },
         options: Options(
           headers: {
             'accept': 'application/json',
+            'Content-Type': 'application/json',
           },
         ),
       );

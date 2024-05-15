@@ -2,16 +2,17 @@
 
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:graduation_project/constants/colors.dart';
 import 'package:graduation_project/models/book_model.dart';
 import 'package:graduation_project/models/review_model.dart';
 import 'package:graduation_project/services/apis/reviews_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_cubit.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   const BookDetailsScreen({super.key});
@@ -34,17 +35,21 @@ class BookDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Book Details'),
       ),
+      floatingActionButton: ContactButtons(
+        bookId: arguments.id!,
+        sellerId: arguments.userId!,
+      ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BookDetailsWidget(arguments: arguments),
-              const SizedBox(height: 20),
-              //* Book Description
-              Text(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BookDetailsWidget(arguments: arguments),
+            const SizedBox(height: 20),
+            //* Book Description
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
                 'Description: ${arguments.description!}',
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
@@ -54,61 +59,60 @@ class BookDetailsScreen extends StatelessWidget {
                   // color: paragraphColor,
                 ),
               ),
-              //* END Book Description
-              const SizedBox(height: 20),
-              BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  if (state is Authenticated) {
-                    return Column(
+            ),
+            //* END Book Description
+            const SizedBox(height: 20),
+            BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) {
+                if (state is Authenticated) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
                       children: [
-                        ContactButtons(
-                          sellerId: arguments.userId!,
-                          bookId: arguments.id!,
-                        ),
                         const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             _dialogBuilder(context, arguments.id!.toInt());
                           },
-                          child: const Text("Submit a review"),
+                          child: const Text("Review"),
                         ),
                       ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/login');
+                      },
+                      child: const Text('Login to contact the owner'),
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 20),
+            const Text('Reviews', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            //* Reviews
+            FutureBuilder<List<ReviewModel>>(
+                future: ReviewsService().getReviews(arguments.id!.toInt()),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
                     );
                   } else {
-                    return Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/login');
-                        },
-                        child: const Text('Login to contact the owner'),
-                      ),
-                    );
+                    return snapshot.data!.isEmpty
+                        ? const Text('No reviews')
+                        : ReviewsList(reviews: snapshot.data!);
                   }
-                },
-              ),
-              const SizedBox(height: 20),
-              const Text('Reviews', style: TextStyle(fontSize: 20)),
-              const SizedBox(height: 20),
-              //* Reviews
-              FutureBuilder<List<ReviewModel>>(
-                  future: ReviewsService().getReviews(arguments.id!.toInt()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else {
-                      return snapshot.data!.isEmpty
-                          ? const Text('No reviews')
-                          : ReviewsList(reviews: snapshot.data!);
-                    }
-                  }),
-            ],
-          ),
+                }),
+          ],
         ),
       ),
     );
@@ -220,15 +224,18 @@ class ReviewsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: reviews.length,
-      itemBuilder: (context, index) {
-        return ReviewWidget(
-          review: reviews[index],
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: reviews.length,
+        itemBuilder: (context, index) {
+          return ReviewWidget(
+            review: reviews[index],
+          );
+        },
+      ),
     );
   }
 }
@@ -244,38 +251,50 @@ class ContactButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              backgroundColor: Colors.green,
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/chat', arguments: {
-                'sellerId': sellerId,
-                'buyerId':
-                    BlocProvider.of<AuthCubit>(context).userData!.data!.id,
-                'bookId': bookId,
-              });
-            },
-            child: const Text(
-              'Chat',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          flex: 1,
-          child: OutlinedButton(
-            onPressed: () {},
-            child: const Text('Call'),
-          ),
-        ),
-      ],
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        return state is Authenticated
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                    heroTag: null,
+                    onPressed: () {},
+                    child: const Icon(Icons.bookmark),
+                  ),
+                  const SizedBox(width: 20),
+                  FloatingActionButton.extended(
+                    heroTag: null,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/chat', arguments: {
+                        'sellerId': sellerId,
+                        'buyerId': BlocProvider.of<AuthCubit>(context)
+                            .userData!
+                            .data!
+                            .id,
+                        'bookId': bookId,
+                      });
+                    },
+                    label: const Text("Chat"),
+                    icon: const Icon(Icons.chat),
+                  ),
+                  const SizedBox(width: 20),
+                  FloatingActionButton.extended(
+                    heroTag: null,
+                    onPressed: () {},
+                    label: const Text("Call"),
+                    icon: const Icon(Icons.phone),
+                  ),
+                ],
+              )
+            : FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/login');
+                },
+                label: const Text('Login to contact the owner'),
+                icon: const Icon(Icons.chat),
+              );
+      },
     );
   }
 }
@@ -371,49 +390,146 @@ class BookDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.network(
-            arguments.image!,
-            height: 200,
-          ),
-        ),
-        const SizedBox(width: 20),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
             children: [
-              Text(arguments.title!,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: const TextStyle(fontSize: 20)),
-              Text(
-                arguments.author!,
-                maxLines: 1,
+              Image.asset(
+                'assets/images/book-details-bg.png',
+                // height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(height: 10),
-              Text(
-                'Category: ${arguments.category!.name!}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              Container(
+                alignment: Alignment.bottomCenter,
+                height: 350,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Hero(
+                    tag: arguments.id!,
+                    child: CachedNetworkImage(
+                      imageUrl: arguments.image!,
+                      height: 200,
+                      width: 130,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          height: 200,
+                          width: 100,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                  'for ${arguments.availability!}: ${arguments.availability == "sale" ? "${arguments.price}EGP" : "🔄"}'),
-              const SizedBox(height: 4),
-              Text('Posted by: ${arguments.user?.name ?? 'Unknown'}',
-                  maxLines: 1, overflow: TextOverflow.ellipsis),
-              const SizedBox(height: 4),
-              Text(
-                  'Reviews: ${arguments.reviewsAvgRating != null ? '${arguments.reviewsAvgRating!.toStringAsFixed(2)} ⭐' : 'no reviews'}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis),
             ],
           ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  arguments.title!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "myfont5",
+                  ),
+                ),
+                Text(
+                  arguments.author!,
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  arguments.availability == 'swap'
+                      ? '🤝'
+                      : '${arguments.price}EGP',
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFD4D2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      BookDetailsInfo(
+                        value:
+                            '${arguments.reviewsAvgRating?.toStringAsFixed(2) ?? '0'}⭐',
+                        title: 'Rating',
+                      ),
+                      const BookDetailsInfo(
+                        value: '289',
+                        title: 'Pages',
+                      ),
+                      BookDetailsInfo(
+                        value: arguments.category!.name!,
+                        title: 'Category',
+                      ),
+                      BookDetailsInfo(
+                        value: '${arguments.status}',
+                        title: 'Status',
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BookDetailsInfo extends StatelessWidget {
+  const BookDetailsInfo({
+    super.key,
+    required this.value,
+    required this.title,
+  });
+  final String value;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: "myfont5",
+              color: Color(0xFF323232)),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          title,
+          style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: "myfont5",
+              color: Color(0xFF756F6F)),
         ),
       ],
     );

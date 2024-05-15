@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/models/book_model.dart';
 import 'package:graduation_project/screens/widgets/primary_button.dart';
+import 'package:graduation_project/screens/widgets/single_book_widget.dart';
 import 'package:graduation_project/services/apis/books_service.dart';
 
 import '../services/cubits/auth/auth_cubit.dart';
@@ -24,6 +24,7 @@ class UserBooksScreen extends StatelessWidget {
           children: [
             PrimaryButton(
                 text: 'Add book',
+                color: null,
                 onPressed: () {
                   Navigator.of(context).pushNamed('/add-book');
                 }),
@@ -52,45 +53,7 @@ class UserBooksScreen extends StatelessWidget {
                       );
                     }
                     final books = snapshot.data;
-                    return ListView.builder(
-                      itemCount: books!.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(books[index].title!),
-                          subtitle: Text(books[index].author!),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () async {
-                              // delete book
-                              bool isDeleted =
-                                  await BooksServiceApi().deleteBook(
-                                bookId: books[index].id!,
-                                token: BlocProvider.of<AuthCubit>(context)
-                                    .userData!
-                                    .token!,
-                              );
-                              if (isDeleted) {
-                                await FirebaseStorage.instance
-                                    .refFromURL(books[index].image!)
-                                    .delete();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Book deleted successfully'),
-                                  ),
-                                );
-                                Navigator.of(context).pop();
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Error deleting book'),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        );
-                      },
-                    );
+                    return SignleBookWidget(books: books!);
                   }),
             ),
           ],

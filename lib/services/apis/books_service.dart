@@ -76,6 +76,29 @@ class BooksServiceApi {
     }
   }
 
+  Future<List<BookModel>> getBooksByCategory({required int categoryId}) async {
+    try {
+      final response = await dio.get('$baseUrl/books/category/$categoryId',
+          options: Options(responseType: ResponseType.json, headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'keep-alive': 'timeout=5, max=1000',
+          }));
+      if (response.statusCode == 200) {
+        final List<BookModel> books = [];
+        for (var item in response.data) {
+          books.add(BookModel.fromJson(item));
+        }
+        return books;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log(e.toString());
+      return [];
+    }
+  }
+
   Future<bool> addBook({
     required String title,
     required String author,
@@ -106,6 +129,38 @@ class BooksServiceApi {
             'Authorization': 'Bearer $token'
           }));
       if (response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      log(e.response!.data['message'].toString());
+      return false;
+    }
+  }
+
+  Future<bool> editBook({
+    required num id,
+    required String title,
+    required String author,
+    required String description,
+    required String? price,
+    required String token,
+  }) async {
+    try {
+      final response = await dio.put('$baseUrl/books/$id',
+          data: {
+            'title': title,
+            'author': author,
+            'description': description,
+            'price': price,
+          },
+          options: Options(responseType: ResponseType.json, headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          }));
+      if (response.statusCode == 200) {
         return true;
       } else {
         return false;

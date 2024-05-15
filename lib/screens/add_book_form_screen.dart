@@ -71,6 +71,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                   controller: titleController,
                   validator: checkValidation,
                   decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     labelText: 'Title',
                   ),
                 ),
@@ -79,6 +80,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                   controller: authorController,
                   validator: checkValidation,
                   decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     labelText: 'Author',
                   ),
                 ),
@@ -87,6 +89,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                   controller: descriptionController,
                   validator: checkValidation,
                   decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     labelText: 'Description',
                   ),
                   maxLines: 2,
@@ -114,7 +117,19 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                           items: categories!.map<DropdownMenuItem<String>>((e) {
                             return DropdownMenuItem(
                               value: e.id.toString(),
-                              child: Text(e.name!),
+                              child: Row(
+                                children: [
+                                  if (e.icon != null) ...[
+                                    Image.network(
+                                      e.icon!,
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    const SizedBox(width: 10),
+                                  ],
+                                  Text(e.name!),
+                                ],
+                              ),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -124,6 +139,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                             });
                           },
                           decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
                             labelText: 'Category',
                           ),
                         );
@@ -136,7 +152,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                 //* Status radio buttons
                 Row(
                   children: [
-                    const Text('Status:'),
+                    const Text('Condition:'),
                     const SizedBox(width: 10),
                     Row(
                       children: [
@@ -223,7 +239,8 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                 ),
                 const SizedBox(height: 20),
                 PrimaryButton(
-                  text: 'Pick Image',
+                  text: image == null ? 'Pick Image' : 'Image Selected',
+                  color: image == null ? null : Colors.green,
                   onPressed: () async {
                     // pick image
                     XFile? xfile = await ImagePicker().pickImage(

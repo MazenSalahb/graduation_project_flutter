@@ -1,5 +1,6 @@
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graduation_project/screens/main_screens/add_book_screen.dart';
 import 'package:graduation_project/screens/main_screens/user_chats_screen.dart';
 
@@ -14,70 +15,71 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   final List<Widget> _screens = [
     const HomeScreen(),
-    const Text('Community Screen'),
-    const AddBookScreen(),
     const UserChatsScreen(),
+    const AddBookScreen(),
     const NotificationsScreens(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        // labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        height: 90,
-        // surfaceTintColor: Colors.transparent,
-        onDestinationSelected: (int index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        // indicatorColor: iconRed,
-        indicatorShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        destinations: const [
-          NavigationDestination(
-            icon: FaIcon(
-              FontAwesomeIcons.house,
-              size: 20,
+      bottomNavigationBar: CurvedNavigationBar(
+        key: _bottomNavigationKey,
+        index: 0,
+        height: 60.0,
+        items: const <CurvedNavigationBarItem>[
+          CurvedNavigationBarItem(
+            child: Icon(
+              Icons.home,
+              size: 35,
+              color: Color.fromARGB(255, 0, 23, 43),
             ),
-            selectedIcon: FaIcon(FontAwesomeIcons.house, size: 20),
-            label: 'Home',
           ),
-          NavigationDestination(
-            icon: FaIcon(FontAwesomeIcons.userGroup, size: 20),
-            selectedIcon: FaIcon(FontAwesomeIcons.userGroup, size: 20),
-            label: 'Community',
-          ),
-          NavigationDestination(
-            icon: FaIcon(FontAwesomeIcons.plus, size: 20),
-            selectedIcon: FaIcon(FontAwesomeIcons.plus, size: 20),
-            label: 'Add book',
-          ),
-          NavigationDestination(
-            icon: FaIcon(FontAwesomeIcons.solidMessage, size: 20),
-            selectedIcon: FaIcon(FontAwesomeIcons.solidMessage, size: 20),
-            label: 'Chats',
-          ),
-          NavigationDestination(
-            icon: FaIcon(
-              FontAwesomeIcons.solidBell,
-              size: 20,
+          CurvedNavigationBarItem(
+            child: Icon(
+              Icons.chat,
+              size: 35,
+              color: Color.fromARGB(255, 0, 23, 43),
             ),
-            selectedIcon: FaIcon(FontAwesomeIcons.solidBell, size: 20),
-            label: 'Notifications',
+          ),
+          CurvedNavigationBarItem(
+            child: Icon(
+              Icons.add,
+              size: 50,
+              color: Color.fromARGB(255, 0, 23, 43),
+            ),
+          ),
+          CurvedNavigationBarItem(
+            child: Icon(
+              Icons.notifications_active,
+              size: 35,
+              color: Color.fromARGB(255, 0, 23, 43),
+            ),
+          ),
+          CurvedNavigationBarItem(
+            child: Icon(
+              Icons.bookmark,
+              size: 35,
+              color: Color.fromARGB(255, 0, 23, 43),
+            ),
           ),
         ],
+        color: const Color(0xFFB78682),
+        buttonBackgroundColor: const Color(0xFFFFD2C8),
+        backgroundColor: Colors.blueGrey,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 600),
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
-      body: IndexedStack(
-        index: selectedIndex,
-        children: _screens,
-      ),
+      body: _screens[_selectedIndex],
     );
   }
 }

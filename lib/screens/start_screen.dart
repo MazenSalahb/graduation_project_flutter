@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'widgets/primary_button.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -8,39 +6,88 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/icon4.png"),
+                fit: BoxFit.fill)),
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        height: double.infinity,
+        child: Stack(
           children: [
-            const Text(
-              'Welcome to the app!',
-              style: TextStyle(fontSize: 26),
-            ),
-            SvgPicture.asset(
-              'assets/svg/book_start.svg',
-              height: 250,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: const Text(
-                "Explore the books around you",
-                style: TextStyle(fontSize: 26),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const Text(
-              'Explore the world of reading. Find your perfect books from a huge collection.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            PrimaryButton(
-              text: 'Get Started',
-              onPressed: () => Navigator.pushReplacementNamed(context, '/main'),
+            Positioned(
+                bottom: 420,
+                right: 85,
+                child: Image.asset(
+                  "assets/images/logo1.png",
+                  height: 320,
+                  width: 244,
+                )),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 100,
+                ),
+                const Text(
+                  "Book Deal",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 45,
+                    height: 2,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "myfont1",
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Padding(
+                    padding: EdgeInsets.only(
+                  left: 45,
+                  right: 45,
+                )),
+                const Text(
+                  "Find your dream book according to your preferemce and join to our family.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: "myfont2"),
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/login");
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 207, 147, 146)),
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 8)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(11))),
+                  ),
+                  child: const Text(
+                    "Get Started",
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontFamily: "myfont3",
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
