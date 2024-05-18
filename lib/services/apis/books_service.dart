@@ -189,4 +189,28 @@ class BooksServiceApi {
       return false;
     }
   }
+
+  Future<List<BookModel>> searchBooks({required String query}) async {
+    try {
+      final response = await dio.post('$baseUrl/books/search',
+          data: {'search': query},
+          options: Options(responseType: ResponseType.json, headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'keep-alive': 'timeout=5, max=1000',
+          }));
+      if (response.statusCode == 200) {
+        final List<BookModel> books = [];
+        for (var item in response.data) {
+          books.add(BookModel.fromJson(item));
+        }
+        return books;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log(e.toString());
+      return [];
+    }
+  }
 }

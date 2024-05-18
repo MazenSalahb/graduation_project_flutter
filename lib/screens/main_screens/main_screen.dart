@@ -2,6 +2,7 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/screens/main_screens/add_book_screen.dart';
+import 'package:graduation_project/screens/main_screens/bookmarks_screen.dart';
 import 'package:graduation_project/screens/main_screens/user_chats_screen.dart';
 
 import 'home_screen.dart';
@@ -22,6 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     const UserChatsScreen(),
     const AddBookScreen(),
     const NotificationsScreens(),
+    const BookMarksScreen()
   ];
 
   @override

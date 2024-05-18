@@ -18,8 +18,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/icon3.png"),
-                fit: BoxFit.fill)),
+          image: DecorationImage(
+              image: AssetImage("assets/images/icon3.png"), fit: BoxFit.fill),
+        ),
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
@@ -44,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const Image(
                   image: AssetImage("assets/images/logo6.png"),
-                  height: 150,
+                  height: 120,
                 ),
                 const Align(
                   alignment: Alignment.centerLeft,
@@ -80,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         right: Radius.circular(7), left: Radius.circular(7)),
                   ),
                   width: double.infinity,
-                  height: 50,
+                  //
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
                     controller: nameController,
@@ -114,7 +116,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         right: Radius.circular(7), left: Radius.circular(7)),
                   ),
                   width: double.infinity,
-                  height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
                     controller: emailController,
@@ -149,7 +150,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         right: Radius.circular(7), left: Radius.circular(7)),
                   ),
                   width: double.infinity,
-                  height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
                     controller: passwordController,
@@ -159,12 +159,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                       return null;
                     },
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: !isPasswordVisible,
+                    decoration: InputDecoration(
                         hintText: "Enter your password",
-                        suffix: Icon(
-                          Icons.visibility,
-                          color: Color.fromARGB(255, 78, 77, 77),
+                        suffix: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                          child: const Icon(
+                            Icons.visibility,
+                            color: Color.fromARGB(255, 78, 77, 77),
+                          ),
                         ),
                         border: InputBorder.none),
                   ),
@@ -189,17 +196,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         right: Radius.circular(7), left: Radius.circular(7)),
                   ),
                   width: double.infinity,
-                  height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
                     controller: phoneNumberController,
                     keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
                     decoration: const InputDecoration(
                         hintText: "Enter your phone number",
-                        suffix: Icon(
-                          Icons.visibility,
-                          color: Color.fromARGB(255, 78, 77, 77),
-                        ),
+                        border: InputBorder.none),
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Address",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.horizontal(
+                        right: Radius.circular(7), left: Radius.circular(7)),
+                  ),
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextFormField(
+                    controller: addressController,
+                    keyboardType: TextInputType.streetAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        hintText: "Enter your address",
                         border: InputBorder.none),
                   ),
                 ),
@@ -207,7 +247,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 5,
                 ),
                 const Text(
-                  "Agree With Terms and Privacy Policy ",
+                  "by signing up you agree to our terms and conditions",
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(
@@ -228,7 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         name: nameController.text,
                         email: emailController.text,
                         password: passwordController.text,
-                        location: 'Alexandria',
+                        location: addressController.text,
                         phone: phoneNumberController.text,
                       );
                       if (success) {
@@ -238,7 +278,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'User registered successfully, please login to continue.'),
                           ),
                         );
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/login', (route) => false);
                       } else {
                         setState(() {
                           isLoading = false;
@@ -303,9 +344,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         width: 22,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, "/Deal1");
-                        },
+                        onTap: () {},
                         child: Container(
                           padding: const EdgeInsets.all(7),
                           decoration: BoxDecoration(

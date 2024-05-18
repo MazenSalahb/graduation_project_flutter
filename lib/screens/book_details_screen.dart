@@ -9,10 +9,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:graduation_project/models/book_model.dart';
 import 'package:graduation_project/models/review_model.dart';
+import 'package:graduation_project/services/apis/bookmark_service.dart';
 import 'package:graduation_project/services/apis/reviews_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_cubit.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   const BookDetailsScreen({super.key});
@@ -38,6 +40,7 @@ class BookDetailsScreen extends StatelessWidget {
       floatingActionButton: ContactButtons(
         bookId: arguments.id!,
         sellerId: arguments.userId!,
+        phoneNumber: arguments.user!.phone!,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -50,9 +53,10 @@ class BookDetailsScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'Description: ${arguments.description!}',
+                arguments.description!,
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,
                   // fontWeight: FontWeight.bold,
@@ -245,47 +249,79 @@ class ContactButtons extends StatelessWidget {
     super.key,
     required this.sellerId,
     required this.bookId,
+    required this.phoneNumber,
   });
   final num sellerId;
   final num bookId;
+  final String phoneNumber;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         return state is Authenticated
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    heroTag: null,
-                    onPressed: () {},
-                    child: const Icon(Icons.bookmark),
-                  ),
-                  const SizedBox(width: 20),
-                  FloatingActionButton.extended(
-                    heroTag: null,
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/chat', arguments: {
-                        'sellerId': sellerId,
-                        'buyerId': BlocProvider.of<AuthCubit>(context)
-                            .userData!
-                            .data!
-                            .id,
-                        'bookId': bookId,
-                      });
-                    },
-                    label: const Text("Chat"),
-                    icon: const Icon(Icons.chat),
-                  ),
-                  const SizedBox(width: 20),
-                  FloatingActionButton.extended(
-                    heroTag: null,
-                    onPressed: () {},
-                    label: const Text("Call"),
-                    icon: const Icon(Icons.phone),
-                  ),
-                ],
+            ? Padding(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FloatingActionButton.extended(
+                      label: const Icon(Icons.bookmark),
+                      heroTag: null,
+                      onPressed: () async {
+                        bool success = await BookmarkService().addBookmark(
+                          bookId: bookId,
+                          userId: BlocProvider.of<AuthCubit>(context)
+                              .userData!
+                              .data!
+                              .id!,
+                        );
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Bookmarked successfully'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Already in your bookmarks'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      // child: const Icon(Icons.bookmark),
+                    ),
+                    const SizedBox(width: 20),
+                    FloatingActionButton.extended(
+                      heroTag: null,
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/chat', arguments: {
+                          'sellerId': sellerId,
+                          'buyerId': BlocProvider.of<AuthCubit>(context)
+                              .userData!
+                              .data!
+                              .id,
+                          'bookId': bookId,
+                        });
+                      },
+                      label: const Text("Chat"),
+                      icon: const Icon(Icons.chat),
+                    ),
+                    const SizedBox(width: 20),
+                    FloatingActionButton.extended(
+                      heroTag: null,
+                      onPressed: () async {
+                        await launchUrlString('tel:$phoneNumber');
+                      },
+                      label: const Text("Call"),
+                      icon: const Icon(Icons.phone),
+                    ),
+                  ],
+                ),
               )
             : FloatingActionButton.extended(
                 onPressed: () {

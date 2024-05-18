@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({super.key});
+  const AppBarWidget({super.key, required this.isHomeScreen});
+  final bool isHomeScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,25 @@ class AppBarWidget extends StatelessWidget {
         },
         icon: const Icon(Icons.grid_view_rounded),
       ),
-      actions: const [
-        ProfileAppBarWidget(),
+      actions: [
+        Builder(
+          builder: (context) {
+            if (isHomeScreen) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/search");
+                  },
+                  icon: const Icon(Icons.search),
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          },
+        ),
+        const ProfileAppBarWidget(),
       ],
     );
   }

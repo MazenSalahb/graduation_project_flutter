@@ -18,6 +18,7 @@ class ProfileScreen extends StatelessWidget {
           );
         } else if (state is NotAuthenticated) {
           return Scaffold(
+            backgroundColor: Colors.transparent,
             body: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -55,12 +56,27 @@ class AuthProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/profile_bg.png'),
+          fit: BoxFit.cover,
+        ),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white,
+            Color.fromARGB(255, 231, 200, 200),
+          ],
+        ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Profile'),
+        ),
+        body: SingleChildScrollView(
           child: Column(
             children: [
               SvgPicture.network(profileImage, height: 200, width: 200),
@@ -79,10 +95,10 @@ class AuthProfileWidget extends StatelessWidget {
                   // Navigate to the profile screen
                 },
               ),
-              Divider(
+              const Divider(
                 // Add a horizontal line
-                color: Colors.grey[300],
-                thickness: 2,
+                color: Colors.black,
+                thickness: 1,
               ),
               ListTile(
                 leading: const Icon(Icons.book_outlined),
@@ -93,10 +109,10 @@ class AuthProfileWidget extends StatelessWidget {
                   Navigator.of(context).pushNamed('/your-books');
                 },
               ),
-              Divider(
+              const Divider(
                 // Add a horizontal line
-                color: Colors.grey[300],
-                thickness: 2,
+                color: Colors.black,
+                thickness: 1,
               ),
               ListTile(
                 leading: const Icon(Icons.logout_outlined),

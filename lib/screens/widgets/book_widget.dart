@@ -30,7 +30,7 @@ class BookWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Add your book item widgets here
+            // Image
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Hero(
@@ -55,6 +55,7 @@ class BookWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
+            // Title
             Flexible(
               child: Text(
                 book.title!,
@@ -62,12 +63,13 @@ class BookWidget extends StatelessWidget {
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                   fontFamily: "myfont4",
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+            // author
             Text(
               book.author!,
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),

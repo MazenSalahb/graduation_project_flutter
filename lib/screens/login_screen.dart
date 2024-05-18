@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +35,14 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Image(
-                  image: AssetImage("assets/images/logo6.png"),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    left: 0,
-                    right: 240,
-                    top: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const Image(
+                    image: AssetImage("assets/images/logo6.png"),
                   ),
-                  child: const Text(
+                  const Text(
                     "Log in",
                     style: TextStyle(
                         fontSize: 40,
@@ -53,115 +50,104 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontFamily: "myfont2",
                         fontWeight: FontWeight.w700),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    left: 25,
-                    right: 340,
-                    top: 20,
-                    bottom: 0,
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Email",
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ),
-                  child: const Text(
-                    "Email",
-                    style: TextStyle(fontSize: 15),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(7), left: Radius.circular(7)),
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.horizontal(
+                          right: Radius.circular(7), left: Radius.circular(7)),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextFormField(
+                      controller: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                          icon: Icon(
+                            Icons.person,
+                            color: Color.fromARGB(255, 10, 10, 10),
+                          ),
+                          hintText: "Enter Email :",
+                          border: InputBorder.none),
+                    ),
                   ),
-                  width: 380,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                        icon: Icon(
-                          Icons.person,
-                          color: Color.fromARGB(255, 10, 10, 10),
-                        ),
-                        hintText: "Enter Email :",
-                        border: InputBorder.none),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                    right: 300,
-                    top: 5,
-                    bottom: 0,
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Password",
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ),
-                  child: const Text(
-                    "Password",
-                    style: TextStyle(fontSize: 15),
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(7), left: Radius.circular(7)),
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.horizontal(
+                          right: Radius.circular(7), left: Radius.circular(7)),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextFormField(
+                      controller: passwordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                      obscureText: !isPasswordVisible,
+                      decoration: InputDecoration(
+                          suffix: InkWell(
+                            onTap: () {
+                              isPasswordVisible = !isPasswordVisible;
+                              setState(() {});
+                            },
+                            child: const Icon(
+                              Icons.visibility,
+                              color: Color.fromARGB(255, 78, 77, 77),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.lock,
+                            color: Color.fromARGB(255, 10, 10, 10),
+                            size: 19,
+                          ),
+                          hintText: "Enter The Password :",
+                          border: InputBorder.none),
+                    ),
                   ),
-                  width: 380,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        suffix: Icon(
-                          Icons.visibility,
-                          color: Color.fromARGB(255, 78, 77, 77),
-                        ),
-                        icon: Icon(
-                          Icons.lock,
-                          color: Color.fromARGB(255, 10, 10, 10),
-                          size: 19,
-                        ),
-                        hintText: "Enter The Password :",
-                        border: InputBorder.none),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                  // const Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: Text(
+                  //     "Forget your password?",
+                  //     style: TextStyle(fontSize: 15),
+                  //   ),
+                  // ),
+                  const SizedBox(
+                    height: 30,
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                    right: 210,
-                    top: 15,
-                    bottom: 0,
-                  ),
-                  child: const Text(
-                    "Forget your password?",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-                const SizedBox(
-                  height: 45,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: PrimaryButton(
+                  PrimaryButton(
                     color: null,
                     text: 'Login',
                     isDisabled: isLoading,
@@ -194,80 +180,73 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     },
                   ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color:
-                                          const Color.fromARGB(255, 15, 15, 15),
-                                      width: 1.5)),
-                              child: SvgPicture.asset(
-                                "assets/images/face.svg",
-                                height: 55,
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 15, 15, 15),
+                                        width: 1.5)),
+                                child: SvgPicture.asset(
+                                  "assets/images/face.svg",
+                                  height: 55,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 22,
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.all(7),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color:
-                                          const Color.fromARGB(255, 15, 15, 15),
-                                      width: 1.5)),
-                              child: SvgPicture.asset(
-                                "assets/images/icons8-google.svg",
-                                height: 50,
+                            const SizedBox(
+                              width: 22,
+                            ),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: const EdgeInsets.all(7),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 15, 15, 15),
+                                        width: 1.5)),
+                                child: SvgPicture.asset(
+                                  "assets/images/icons8-google.svg",
+                                  height: 50,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 5,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                        left: 85,
-                        top: 10,
-                      ),
-                      child: const Text(
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
                         "Do not have an account ?",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w700),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                      ),
-                      child: GestureDetector(
+                      GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, "/register");
                         },
@@ -277,10 +256,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontSize: 17, fontWeight: FontWeight.w900),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

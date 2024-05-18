@@ -18,7 +18,10 @@ class BooksCategory extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-              fontSize: 20, fontFamily: "myfont6", fontWeight: FontWeight.w900),
+            fontSize: 20,
+            fontFamily: "myfont6",
+            fontWeight: FontWeight.w900,
+          ),
         ),
         const Spacer(),
         TextButton(

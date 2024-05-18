@@ -216,7 +216,8 @@ class ChatWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 chat.book!.image!,
-                height: 160,
+                // height: 180,
+                width: 100,
               ),
             ),
             Expanded(

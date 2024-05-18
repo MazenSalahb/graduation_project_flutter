@@ -1,4 +1,4 @@
-const baseUrl = 'http://10.0.2.2:8000/api';
+const baseUrl = 'https://graduation-project-5z2e.onrender.com/api';
 
 // 10.0.2.2:8000
 // https://graduation-project-5z2e.onrender.com

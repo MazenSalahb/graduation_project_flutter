@@ -9,13 +9,17 @@ import 'package:graduation_project/screens/book_details_screen.dart';
 import 'package:graduation_project/screens/books_screen.dart';
 import 'package:graduation_project/screens/categories_screen.dart';
 import 'package:graduation_project/screens/chat_screen.dart';
+import 'package:graduation_project/screens/choose_payment_screen.dart';
+import 'package:graduation_project/screens/choose_plan_screen.dart';
 import 'package:graduation_project/screens/edit_book_screen.dart';
+import 'package:graduation_project/screens/get_started_screen.dart';
 import 'package:graduation_project/screens/login_screen.dart';
 import 'package:graduation_project/screens/main_screens/main_screen.dart';
 import 'package:graduation_project/screens/main_screens/notifications_screen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:graduation_project/screens/search_screen.dart';
 import 'package:graduation_project/screens/start_screen.dart';
 import 'package:graduation_project/screens/user_books_screen.dart';
 import 'package:graduation_project/services/cubits/auth/auth_cubit.dart';
@@ -61,18 +65,22 @@ class MainApp extends StatelessWidget {
             ),
             routes: {
               '/start': (context) => const StartScreen(),
+              '/get-started': (context) => const GetStartedScreen(),
               '/main': (context) => const MainScreen(),
               '/login': (context) => const LoginScreen(),
               '/register': (context) => const RegisterScreen(),
               '/book-details': (context) => const BookDetailsScreen(),
               '/your-books': (context) => const UserBooksScreen(),
               '/books': (context) => const BooksScreen(),
+              '/search': (context) => const SearchScreen(),
               '/add-book': (context) => const AddBookFormScreen(),
               '/edit-book': (context) => const EditBookScreen(),
               '/chat': (context) => const ChatScreen(),
               '/notifications': (context) => const NotificationsScreens(),
               '/profile': (context) => const ProfileScreen(),
               '/categories': (context) => const CategoriesScreen(),
+              '/choose-plan': (context) => const ChoosePlanScreen(),
+              '/choose-payment': (context) => const ChoosePaymentScreen(),
             },
             home: BlocProvider.of<AuthCubit>(context).state is Authenticated
                 ? const MainScreen()

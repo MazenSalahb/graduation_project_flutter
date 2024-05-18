@@ -17,7 +17,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(100),
-        child: AppBarWidget(),
+        child: AppBarWidget(
+          isHomeScreen: true,
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -28,21 +30,21 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //*START Search Section
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search for a book, author, or genre",
-                    prefixIcon: const Icon(Icons.search),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    // fillColor: Colors.grey[100],
-                  ),
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: TextField(
+              //     decoration: InputDecoration(
+              //       hintText: "Search for a book, author, or genre",
+              //       prefixIcon: const Icon(Icons.search),
+              //       contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //       filled: true,
+              //       // fillColor: Colors.grey[100],
+              //     ),
+              //   ),
+              // ),
               //* END Search Section
               //*START Categories Section
               // Padding(

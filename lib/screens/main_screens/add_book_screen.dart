@@ -18,7 +18,9 @@ class AddBookScreen extends StatelessWidget {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(100),
-        child: AppBarWidget(),
+        child: AppBarWidget(
+          isHomeScreen: false,
+        ),
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {

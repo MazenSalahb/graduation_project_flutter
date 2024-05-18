@@ -1,19 +1,20 @@
 class BookModel {
-  num? id;
+  int? id;
   String? title;
   String? author;
   String? description;
-  num? categoryId;
+  int? categoryId;
   String? status;
   String? availability;
+  String? approvalStatus;
   num? price;
   String? image;
-  num? userId;
+  int? userId;
   String? createdAt;
   String? updatedAt;
   num? reviewsAvgRating;
-  Category? category;
   User? user;
+  Category? category;
 
   BookModel(
       {this.id,
@@ -23,14 +24,15 @@ class BookModel {
       this.categoryId,
       this.status,
       this.availability,
+      this.approvalStatus,
       this.price,
       this.image,
       this.userId,
       this.createdAt,
       this.updatedAt,
       this.reviewsAvgRating,
-      this.category,
-      this.user});
+      this.user,
+      this.category});
 
   BookModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,40 +42,24 @@ class BookModel {
     categoryId = json['category_id'];
     status = json['status'];
     availability = json['availability'];
+    approvalStatus = json['approval_status'];
     price = json['price'];
     image = json['image'];
     userId = json['user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     reviewsAvgRating = json['reviews_avg_rating'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     category =
         json['category'] != null ? Category.fromJson(json['category']) : null;
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
-  }
-}
-
-class Category {
-  int? id;
-  String? name;
-  String? color;
-  String? createdAt;
-  String? updatedAt;
-
-  Category({this.id, this.name, this.color, this.createdAt, this.updatedAt});
-
-  Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    color = json['color'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
   }
 }
 
 class User {
-  num? id;
+  int? id;
   String? name;
   String? email;
+  String? phone;
   String? location;
   String? profilePicture;
   String? role;
@@ -85,6 +71,7 @@ class User {
       {this.id,
       this.name,
       this.email,
+      this.phone,
       this.location,
       this.profilePicture,
       this.role,
@@ -96,10 +83,37 @@ class User {
     id = json['id'];
     name = json['name'];
     email = json['email'];
+    phone = json['phone'];
     location = json['location'];
     profilePicture = json['profile_picture'];
     role = json['role'];
     emailVerifiedAt = json['email_verified_at'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+}
+
+class Category {
+  int? id;
+  String? name;
+  String? icon;
+  String? color;
+  String? createdAt;
+  String? updatedAt;
+
+  Category(
+      {this.id,
+      this.name,
+      this.icon,
+      this.color,
+      this.createdAt,
+      this.updatedAt});
+
+  Category.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    icon = json['icon'];
+    color = json['color'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }

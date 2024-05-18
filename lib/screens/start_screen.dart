@@ -14,26 +14,21 @@ class StartScreen extends StatelessWidget {
       ),
       body: Container(
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/icon4.png"),
-                fit: BoxFit.fill)),
+          image: DecorationImage(
+              image: AssetImage("assets/images/icon4.png"), fit: BoxFit.fill),
+        ),
         width: double.infinity,
         height: double.infinity,
         child: Stack(
           children: [
-            Positioned(
-                bottom: 420,
-                right: 85,
-                child: Image.asset(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
                   "assets/images/logo1.png",
                   height: 320,
                   width: 244,
-                )),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 100,
                 ),
                 const Text(
                   "Book Deal",
@@ -67,7 +62,7 @@ class StartScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/login");
+                    Navigator.pushNamed(context, "/get-started");
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
