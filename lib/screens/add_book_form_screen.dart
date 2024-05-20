@@ -285,7 +285,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                               });
                             },
                           ),
-                          const Text('for Swap'),
+                          const Text('for Dealing'),
                         ],
                       ),
                     ],

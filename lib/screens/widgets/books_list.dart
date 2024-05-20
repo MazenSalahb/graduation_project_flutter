@@ -16,8 +16,10 @@ class BooksList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // margin: const EdgeInsets.only(left: 20),
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      height: isSwapBook ? 320 : 200,
+      padding: isSwapBook
+          ? const EdgeInsets.symmetric(vertical: 10)
+          : const EdgeInsets.symmetric(vertical: 30),
+      height: isSwapBook ? 320 : 300,
       decoration: isSwapBook
           ? const BoxDecoration(
               image: DecorationImage(
@@ -25,7 +27,18 @@ class BooksList extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             )
-          : null,
+          : const BoxDecoration(
+              color: Color(0xFFFFF6F6),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(35),
+                topRight: Radius.circular(50),
+              ),
+              border: Border(
+                top: BorderSide(color: Color(0xFFE9E9E9)),
+                bottom: BorderSide(
+                  color: Color(0xFFE9E9E9),
+                ),
+              )),
       child: FutureBuilder<List<BookModel>>(
         future: books,
         builder: (context, snapshot) {
@@ -39,7 +52,7 @@ class BooksList extends StatelessWidget {
             );
           } else if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.only(left: 20),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {

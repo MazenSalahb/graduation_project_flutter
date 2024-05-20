@@ -31,26 +31,39 @@ class BookWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Hero(
-                tag: book.id!,
-                child: CachedNetworkImage(
-                  imageUrl: book.image!,
-                  height: isSwapBook ? 240 : 140,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Theme.of(context).colorScheme.surface,
-                    highlightColor:
-                        Theme.of(context).colorScheme.surfaceVariant,
-                    child: Container(
-                      height: isSwapBook ? 240 : 140,
-                      width: double.infinity,
-                      color: Colors.grey,
-                    ),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.7),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: const Offset(5, 5),
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Hero(
+                  tag: book.id!,
+                  child: CachedNetworkImage(
+                    imageUrl: book.image!,
+                    height: isSwapBook ? 240 : 140,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Theme.of(context).colorScheme.surface,
+                      highlightColor:
+                          Theme.of(context).colorScheme.surfaceVariant,
+                      child: Container(
+                        height: isSwapBook ? 240 : 140,
+                        width: double.infinity,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
                 ),
               ),
             ),
@@ -81,8 +94,26 @@ class BookWidget extends StatelessWidget {
                   style: const TextStyle(fontSize: 12, color: Colors.amber),
                 ),
                 const SizedBox(width: 5),
-                Text(book.availability == 'sale' ? '${book.price}EGP' : '| 🤝',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                // Text(
+                //   book.availability == 'sale' ? '${book.price}EGP' : '| ',
+                //   style: const TextStyle(fontSize: 12, color: Colors.grey),
+                // ),
+                Builder(
+                  builder: (context) {
+                    if (book.availability == 'sale') {
+                      return Text(
+                        '${book.price} EGP',
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
+                      );
+                    } else {
+                      return Image.asset(
+                        'assets/images/swap-icon.png',
+                        width: 35,
+                      );
+                    }
+                  },
+                ),
               ],
             )
           ],

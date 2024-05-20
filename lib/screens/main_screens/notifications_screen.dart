@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:graduation_project/screens/widgets/app_bar.dart';
 import 'package:graduation_project/screens/widgets/please_login_widget.dart';
 import 'package:graduation_project/services/apis/notification_service.dart';
@@ -91,7 +91,10 @@ class NotificationWidget extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       child: Row(
         children: [
-          SvgPicture.network(notification.data!.image!, height: 50, width: 50),
+          ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(notification.data!.image!,
+                  height: 50, width: 50)),
           const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

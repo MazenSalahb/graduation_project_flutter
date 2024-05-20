@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:graduation_project/services/cubits/auth/auth_cubit.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 
@@ -75,11 +74,14 @@ class AuthProfileWidget extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Profile'),
+          backgroundColor: Colors.transparent,
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SvgPicture.network(profileImage, height: 200, width: 200),
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(profileImage, height: 200, width: 200)),
               const SizedBox(height: 16),
               Text(
                 name,
@@ -89,10 +91,11 @@ class AuthProfileWidget extends StatelessWidget {
               const SizedBox(height: 15),
               ListTile(
                 leading: const Icon(Icons.person_outline),
-                title: const Text('Edit Profile'),
+                title: const Text('Your Profile'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to the profile screen
+                  Navigator.of(context).pushNamed('/edit-profile');
                 },
               ),
               const Divider(
@@ -102,7 +105,7 @@ class AuthProfileWidget extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.book_outlined),
-                title: const Text('Your Books'),
+                title: const Text('My Books'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Navigate to the Books screen
@@ -115,13 +118,42 @@ class AuthProfileWidget extends StatelessWidget {
                 thickness: 1,
               ),
               ListTile(
+                leading: const Icon(Icons.settings_outlined),
+                title: const Text('Settings'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  // Navigate to the Books screen
+                  Navigator.of(context).pushNamed('/settings');
+                },
+              ),
+              // const Divider(
+              //   // Add a horizontal line
+              //   color: Colors.black,
+              //   thickness: 1,
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.person_add_outlined),
+              //   title: const Text('Invite Friends'),
+              //   trailing: const Icon(Icons.arrow_forward_ios),
+              //   onTap: () {
+              //     // Navigate to the Books screen
+              //     // Navigator.of(context).pushNamed('/');
+              //   },
+              // ),
+              const Divider(
+                // Add a horizontal line
+                color: Colors.black,
+                thickness: 1,
+              ),
+              ListTile(
                 leading: const Icon(Icons.logout_outlined),
                 title: const Text('Log Out'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   // Logout user
                   context.read<AuthCubit>().logout();
-                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/start', (route) => false);
                 },
               ),
             ],

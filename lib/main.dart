@@ -8,10 +8,13 @@ import 'package:graduation_project/screens/add_book_form_screen.dart';
 import 'package:graduation_project/screens/book_details_screen.dart';
 import 'package:graduation_project/screens/books_screen.dart';
 import 'package:graduation_project/screens/categories_screen.dart';
+import 'package:graduation_project/screens/change_password_screen.dart';
 import 'package:graduation_project/screens/chat_screen.dart';
 import 'package:graduation_project/screens/choose_payment_screen.dart';
 import 'package:graduation_project/screens/choose_plan_screen.dart';
+import 'package:graduation_project/screens/delete_account_screen.dart';
 import 'package:graduation_project/screens/edit_book_screen.dart';
+import 'package:graduation_project/screens/edit_profile_screen.dart';
 import 'package:graduation_project/screens/get_started_screen.dart';
 import 'package:graduation_project/screens/login_screen.dart';
 import 'package:graduation_project/screens/main_screens/main_screen.dart';
@@ -20,6 +23,7 @@ import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:graduation_project/screens/search_screen.dart';
+import 'package:graduation_project/screens/settings_screen.dart';
 import 'package:graduation_project/screens/start_screen.dart';
 import 'package:graduation_project/screens/user_books_screen.dart';
 import 'package:graduation_project/services/cubits/auth/auth_cubit.dart';
@@ -78,6 +82,10 @@ class MainApp extends StatelessWidget {
               '/chat': (context) => const ChatScreen(),
               '/notifications': (context) => const NotificationsScreens(),
               '/profile': (context) => const ProfileScreen(),
+              '/edit-profile': (context) => const EditProfileScreen(),
+              '/settings': (context) => const SettingsScreen(),
+              '/change-password': (context) => const ChangePasswordScreen(),
+              '/delete-account': (context) => const DeleteAccountScreen(),
               '/categories': (context) => const CategoriesScreen(),
               '/choose-plan': (context) => const ChoosePlanScreen(),
               '/choose-payment': (context) => const ChoosePaymentScreen(),

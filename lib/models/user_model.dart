@@ -10,6 +10,13 @@ class UserModel {
     token = json['token'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
+
+  // Added toJson method
+  Map<String, dynamic> toJson() => {
+        'status': status,
+        'token': token,
+        'data': data?.toJson(), // Handle null data gracefully
+      };
 }
 
 class Data {
@@ -18,6 +25,7 @@ class Data {
   String? email;
   String? location;
   String? profilePicture;
+  String? phone;
   String? role;
   String? emailVerifiedAt;
   String? createdAt;
@@ -29,6 +37,7 @@ class Data {
       this.email,
       this.location,
       this.profilePicture,
+      this.phone,
       this.role,
       this.emailVerifiedAt,
       this.createdAt,
@@ -40,9 +49,25 @@ class Data {
     email = json['email'];
     location = json['location'];
     profilePicture = json['profile_picture'];
+    phone = json['phone'];
     role = json['role'];
     emailVerifiedAt = json['email_verified_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['email'] = email;
+    data['location'] = location;
+    data['profile_picture'] = profilePicture;
+    data['phone'] = phone;
+    data['role'] = role;
+    data['email_verified_at'] = emailVerifiedAt;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
   }
 }

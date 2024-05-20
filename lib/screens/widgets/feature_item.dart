@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class FeatureItem extends StatelessWidget {
   const FeatureItem({
@@ -41,7 +40,7 @@ class FeatureItem extends StatelessWidget {
               ),
             ),
           ),
-          SvgPicture.asset(
+          Image.asset(
             image,
             width: 100,
           )

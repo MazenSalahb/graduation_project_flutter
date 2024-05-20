@@ -55,4 +55,26 @@ class BookmarkService {
       return false;
     }
   }
+
+  Future<bool> removeBookmark(
+      {required num bookMarkId, required String token}) async {
+    try {
+      final response = await dio.delete('$baseUrl/bookmarks/$bookMarkId',
+          options: Options(responseType: ResponseType.json, headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'keep-alive': 'timeout=5, max=1000',
+            'Authorization': 'Bearer $token',
+          }));
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
 }

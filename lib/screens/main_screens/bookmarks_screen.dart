@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +9,28 @@ import 'package:graduation_project/services/apis/bookmark_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_cubit.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
 
-class BookMarksScreen extends StatelessWidget {
+class BookMarksScreen extends StatefulWidget {
   const BookMarksScreen({super.key});
+
+  @override
+  State<BookMarksScreen> createState() => _BookMarksScreenState();
+}
+
+class _BookMarksScreenState extends State<BookMarksScreen> {
+  var future;
+
+  getBookmarks() async {
+    future = BookmarkService().getUserBookmarks(
+      id: BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBookmarks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +51,7 @@ class BookMarksScreen extends StatelessWidget {
           builder: (context, state) {
             if (state is Authenticated) {
               return FutureBuilder<List<BookmarkModel>>(
-                future: BookmarkService().getUserBookmarks(
-                  id: BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
-                ),
+                future: future,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -47,6 +67,7 @@ class BookMarksScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return BookmarkWidget(
                             bookmark: snapshot.data![index],
+                            getBookmarks: getBookmarks,
                           );
                         },
                       );
@@ -72,8 +93,10 @@ class BookmarkWidget extends StatelessWidget {
   const BookmarkWidget({
     super.key,
     required this.bookmark,
+    required this.getBookmarks,
   });
   final BookmarkModel bookmark;
+  final VoidCallback getBookmarks;
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +149,35 @@ class BookmarkWidget extends StatelessWidget {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          const Icon(Icons.bookmark),
+                          // const SizedBox(width: 5),
+                          IconButton(
+                            onPressed: () async {
+                              final bool removed =
+                                  await BookmarkService().removeBookmark(
+                                bookMarkId: bookmark.id!,
+                                token: BlocProvider.of<AuthCubit>(context)
+                                    .userData!
+                                    .token!,
+                              );
+                              if (removed) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Bookmark removed'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                                getBookmarks();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Error removing bookmark'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.bookmark),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),

@@ -4,9 +4,9 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:graduation_project/models/book_model.dart';
 import 'package:graduation_project/models/review_model.dart';
 import 'package:graduation_project/services/apis/bookmark_service.dart';
@@ -349,9 +349,12 @@ class ReviewWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            SvgPicture.network(
-              review.user!.profilePicture!,
-              width: 40,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(
+                review.user!.profilePicture!,
+                width: 40,
+              ),
             ),
             const SizedBox(width: 20),
             Text(review.user!.name!),

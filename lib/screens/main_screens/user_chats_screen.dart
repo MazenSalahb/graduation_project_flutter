@@ -38,10 +38,10 @@ class UserChatsScreen extends StatelessWidget {
                 bottom: const TabBar(
                   tabs: [
                     Tab(
-                      text: 'Buying',
+                      text: 'Book you are buying',
                     ),
                     Tab(
-                      text: 'Selling',
+                      text: 'Book you are selling',
                     ),
                   ],
                 ),
