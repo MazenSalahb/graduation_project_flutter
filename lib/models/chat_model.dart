@@ -83,6 +83,7 @@ class Buyer {
   String? email;
   String? location;
   String? profilePicture;
+  String? phone;
   String? role;
   String? emailVerifiedAt;
   String? createdAt;
@@ -94,6 +95,7 @@ class Buyer {
       this.email,
       this.location,
       this.profilePicture,
+      this.phone,
       this.role,
       this.emailVerifiedAt,
       this.createdAt,
@@ -105,6 +107,7 @@ class Buyer {
     email = json['email'];
     location = json['location'];
     profilePicture = json['profile_picture'];
+    phone = json['phone'];
     role = json['role'];
     emailVerifiedAt = json['email_verified_at'];
     createdAt = json['created_at'];

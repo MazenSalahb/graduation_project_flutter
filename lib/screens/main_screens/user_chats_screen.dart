@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/models/chat_model.dart';
@@ -5,7 +8,6 @@ import 'package:graduation_project/screens/widgets/please_login_widget.dart';
 import 'package:graduation_project/screens/widgets/profile_appbar_widget.dart';
 import 'package:graduation_project/services/apis/chat_service.dart';
 import 'package:graduation_project/services/cubits/auth/auth_state.dart';
-
 import '../../services/cubits/auth/auth_cubit.dart';
 
 class UserChatsScreen extends StatelessWidget {
@@ -16,9 +18,14 @@ class UserChatsScreen extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is Authenticated) {
-          return DefaultTabController(
-            length: 2,
+          return DecoratedBox(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/chat_bg.png"),
+              ),
+            ),
             child: Scaffold(
+              backgroundColor: Colors.transparent,
               appBar: AppBar(
                 toolbarHeight: 100,
                 centerTitle: true,
@@ -35,23 +42,8 @@ class UserChatsScreen extends StatelessWidget {
                 actions: const [
                   ProfileAppBarWidget(),
                 ],
-                bottom: const TabBar(
-                  tabs: [
-                    Tab(
-                      text: 'Book you are buying',
-                    ),
-                    Tab(
-                      text: 'Book you are selling',
-                    ),
-                  ],
-                ),
               ),
-              body: const TabBarView(
-                children: [
-                  UserBuyingChats(),
-                  UserSellingChats(),
-                ],
-              ),
+              body: const UserChats(),
             ),
           );
         } else {
@@ -64,112 +56,48 @@ class UserChatsScreen extends StatelessWidget {
   }
 }
 
-class UserBuyingChats extends StatelessWidget {
-  const UserBuyingChats({
+class UserChats extends StatelessWidget {
+  const UserChats({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: FutureBuilder<List<ChatModel>>(
-        future: ChatService().getUserBuyingChats(
-          userId: BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error fetching chats'),
-            );
-          } else if (snapshot.hasData) {
-            if (snapshot.data!.isEmpty) {
-              return const Center(
-                child: Text('No chats'),
-              );
-            } else {
-              return BuyingChatsList(
-                chats: snapshot.data!,
-              );
-            }
-          } else {
+    return FutureBuilder<List<ChatModel>>(
+      future: ChatService().getUserChats(
+        userId: BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text('Error fetching chats'),
+          );
+        } else if (snapshot.hasData) {
+          if (snapshot.data!.isEmpty) {
             return const Center(
               child: Text('No chats'),
             );
-          }
-        },
-      ),
-    );
-  }
-}
-
-class UserSellingChats extends StatelessWidget {
-  const UserSellingChats({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: FutureBuilder<List<ChatModel>>(
-        future: ChatService().getUserSellingChats(
-          userId: BlocProvider.of<AuthCubit>(context).userData!.data!.id!,
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error fetching chats'),
-            );
-          } else if (snapshot.hasData) {
-            if (snapshot.data!.isEmpty) {
-              return const Center(
-                child: Text('No chats'),
-              );
-            } else {
-              return SellingChatsList(
-                chats: snapshot.data!,
-              );
-            }
           } else {
-            return const Center(
-              child: Text('No chats'),
+            return UserChatsList(
+              chats: snapshot.data!,
             );
           }
-        },
-      ),
-    );
-  }
-}
-
-class BuyingChatsList extends StatelessWidget {
-  const BuyingChatsList({
-    super.key,
-    required this.chats,
-  });
-  final List<ChatModel> chats;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: chats.length,
-      itemBuilder: (context, index) {
-        return ChatWidget(chat: chats[index], isBuying: true);
+        } else {
+          return const Center(
+            child: Text('No chats'),
+          );
+        }
       },
     );
   }
 }
 
-class SellingChatsList extends StatelessWidget {
-  const SellingChatsList({
+class UserChatsList extends StatelessWidget {
+  const UserChatsList({
     super.key,
     required this.chats,
   });
@@ -180,7 +108,10 @@ class SellingChatsList extends StatelessWidget {
     return ListView.builder(
       itemCount: chats.length,
       itemBuilder: (context, index) {
-        return ChatWidget(chat: chats[index], isBuying: false);
+        return ChatWidget(
+            chat: chats[index],
+            isBuying: chats[index].buyerId ==
+                BlocProvider.of<AuthCubit>(context).userData!.data!.id!);
       },
     );
   }
@@ -199,25 +130,93 @@ class ChatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Delete chat?'),
+              content: const Text('Are you sure you want to delete this chat?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Close'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    bool deleted = await ChatService().deleteChat(
+                      chatId: chat.id!,
+                      token:
+                          BlocProvider.of<AuthCubit>(context).userData!.token!,
+                    );
+                    if (deleted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Chat deleted successfully'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      Navigator.of(context).pushReplacementNamed('/main');
+                    } else {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Error deleting chat'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Delete'),
+                ),
+              ],
+            );
+          },
+        );
+      },
       onTap: () {
         Navigator.of(context).pushNamed('/chat', arguments: {
           'sellerId': chat.seller!.id!,
-          'buyerId': BlocProvider.of<AuthCubit>(context).userData!.data!.id,
+          'buyerId': chat.buyer!.id!,
           'bookId': chat.book!.id!,
+          'talkTo': isBuying ? chat.seller!.name! : chat.buyer!.name!,
+          'image': isBuying
+              ? chat.seller!.profilePicture!
+              : chat.buyer!.profilePicture!,
+          'phone': isBuying ? chat.seller!.phone! : chat.buyer!.phone!,
+          'chatId': chat.id!,
         });
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         width: double.infinity,
         height: 200,
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                chat.book!.image!,
-                // height: 180,
-                width: 100,
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(5, 7),
+                    blurRadius: 7,
+                    spreadRadius: 0.7,
+                  )
+                ],
+                border: Border.all(
+                  color: const Color(0xFFB78682),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: chat.book!.image!,
+                  // height: 180,
+                  width: MediaQuery.of(context).size.width * 0.3,
+                ),
               ),
             ),
             Expanded(
@@ -227,7 +226,17 @@ class ChatWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   // border: Border.all(color: Colors.red),
-                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(5, 7),
+                      blurRadius: 7,
+                      spreadRadius: 0.7,
+                    )
+                  ],
+                  borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
                 ),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -237,7 +246,7 @@ class ChatWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 150,
+                          width: MediaQuery.of(context).size.width * 0.27,
                           child: Text(
                             chat.book!.title!,
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -245,18 +254,47 @@ class ChatWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Text(chat.createdAt!),
+                        Text(
+                          chat.createdAt!,
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Text(chat.book!.author!),
                     const SizedBox(height: 10),
-                    Text(chat.book!.availability == 'sale'
-                        ? '${chat.book!.price!}EGP'
-                        : '🤝'),
-                    const SizedBox(height: 10),
                     Text(
-                        'with: ${isBuying ? chat.seller!.name! : chat.buyer!.name!}'),
+                      chat.book!.availability == 'sale'
+                          ? '${chat.book!.price!}EGP'
+                          : '🤝',
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                            'with: ${isBuying ? chat.seller!.name! : chat.buyer!.name!}'),
+                        const Spacer(),
+                        Builder(
+                          builder: (context) {
+                            if (chat.sellerId ==
+                                BlocProvider.of<AuthCubit>(context)
+                                    .userData!
+                                    .data!
+                                    .id!) {
+                              return const Text('selling',
+                                  style: TextStyle(color: Colors.green));
+                            } else {
+                              return const Text('buying',
+                                  style: TextStyle(color: Colors.red));
+                            }
+                          },
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),

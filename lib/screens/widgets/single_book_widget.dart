@@ -72,8 +72,9 @@ class SignleBookWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Shimmer.fromColors(
                               baseColor: Theme.of(context).colorScheme.surface,
-                              highlightColor:
-                                  Theme.of(context).colorScheme.surfaceVariant,
+                              highlightColor: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
                               child: Container(
                                 height: 140,
                                 width: 100,

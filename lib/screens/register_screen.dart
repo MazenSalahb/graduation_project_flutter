@@ -23,6 +23,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isLoading = false;
   bool isPasswordVisible = false;
 
+  final List<String> governorates = [
+    'Alexandria',
+    'Assiut',
+    'Aswan',
+    'Beheira',
+    'Beni Suef',
+    'Cairo',
+    'Daqahliya',
+    'Damietta',
+    'Fayoum',
+    'Gharbia',
+    'Giza',
+    'Ismailia',
+    'Kafr El Sheikh',
+    'Luxor',
+    'Marsa Matrouh',
+    'Minya',
+    'Monufia',
+    'New Valley',
+    'North Sinai',
+    'Port Said',
+    'Qalioubiya',
+    'Qena',
+    'Red Sea',
+    'Sharqia',
+    'Sohag',
+    'South Sinai',
+    'Suez',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -211,6 +241,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         border: InputBorder.none),
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -221,27 +254,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 5,
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(7), left: Radius.circular(7)),
+                DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.horizontal(
+                        right: Radius.circular(7),
+                        left: Radius.circular(7),
+                      ),
+                    ),
+                    hintText: 'Select your governorate',
                   ),
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextFormField(
-                    controller: addressController,
-                    keyboardType: TextInputType.streetAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                        hintText: "Enter your address",
-                        border: InputBorder.none),
-                  ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      addressController.text = value!;
+                    });
+                  },
+                  items: governorates
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
                 ),
                 const SizedBox(
                   height: 5,

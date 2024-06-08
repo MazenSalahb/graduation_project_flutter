@@ -30,6 +30,7 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
   String? selectedAvailability;
   File? image;
   String? imageUrl;
+  bool isLoading = false;
 
   var future;
 
@@ -306,30 +307,19 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                       }
                     },
                   ),
-                  // const SizedBox(height: 20),
-                  // PrimaryButton(
-                  //   text: image == null ? 'Pick Image' : 'Image Selected',
-                  //   color: image == null ? null : Colors.green,
-                  //   onPressed: () async {
-                  //     // pick image
-                  //     XFile? xfile = await ImagePicker().pickImage(
-                  //         source: ImageSource.gallery, imageQuality: 50);
-                  //     if (xfile != null) {
-                  //       image = File(xfile.path);
-
-                  //       setState(() {});
-                  //     }
-                  //   },
-                  // ),
                   const SizedBox(height: 20),
                   PrimaryButton(
                     text: "Add book",
+                    isDisabled: isLoading,
                     onPressed: () async {
                       if (_formKey.currentState!.validate() &&
                           selectedStatus != null &&
                           selectedAvailability != null &&
                           image != null) {
                         // add book
+                        setState(() {
+                          isLoading = true;
+                        });
                         // upload image to firebase storage
                         var refStorage = FirebaseStorage.instance
                             .ref()
@@ -365,6 +355,9 @@ class _AddBookFormScreenState extends State<AddBookFormScreen> {
                               content: Text('Error adding book'),
                             ),
                           );
+                          setState(() {
+                            isLoading = false;
+                          });
                         }
                       }
                     },

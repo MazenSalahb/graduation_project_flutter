@@ -35,12 +35,15 @@ class BookDetailsScreen extends StatelessWidget {
     final arguments = (ModalRoute.of(context)!.settings.arguments) as BookModel;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Book Details'),
-      ),
-      floatingActionButton: ContactButtons(
-        bookId: arguments.id!,
-        sellerId: arguments.userId!,
-        phoneNumber: arguments.user!.phone!,
+        title: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(arguments.user!.profilePicture!),
+            ),
+            const SizedBox(width: 10),
+            Text(arguments.user!.name!),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -66,6 +69,66 @@ class BookDetailsScreen extends StatelessWidget {
             ),
             //* END Book Description
             const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FloatingActionButton.extended(
+                  label: const Icon(Icons.bookmark),
+                  heroTag: null,
+                  onPressed: () async {
+                    bool success = await BookmarkService().addBookmark(
+                      bookId: arguments.id!,
+                      userId: BlocProvider.of<AuthCubit>(context)
+                          .userData!
+                          .data!
+                          .id!,
+                    );
+                    if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Bookmarked successfully'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Already in your bookmarks'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  // child: const Icon(Icons.bookmark),
+                ),
+                FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/chat', arguments: {
+                      'sellerId': arguments.userId!,
+                      'buyerId': BlocProvider.of<AuthCubit>(context)
+                          .userData!
+                          .data!
+                          .id,
+                      'bookId': arguments.id!,
+                      'talkTo': arguments.user!.name!,
+                      'image': arguments.user!.profilePicture!,
+                      'phone': arguments.user!.phone!,
+                    });
+                  },
+                  label: const Text("Chat"),
+                  icon: const Icon(Icons.chat),
+                ),
+                FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () async {
+                    await launchUrlString('tel:${arguments.user!.phone!}');
+                  },
+                  label: const Text("Call"),
+                  icon: const Icon(Icons.phone),
+                ),
+              ],
+            ),
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {
                 if (state is Authenticated) {
@@ -240,97 +303,6 @@ class ReviewsList extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-}
-
-class ContactButtons extends StatelessWidget {
-  const ContactButtons({
-    super.key,
-    required this.sellerId,
-    required this.bookId,
-    required this.phoneNumber,
-  });
-  final num sellerId;
-  final num bookId;
-  final String phoneNumber;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
-      builder: (context, state) {
-        return state is Authenticated
-            ? Padding(
-                padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.05),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FloatingActionButton.extended(
-                      label: const Icon(Icons.bookmark),
-                      heroTag: null,
-                      onPressed: () async {
-                        bool success = await BookmarkService().addBookmark(
-                          bookId: bookId,
-                          userId: BlocProvider.of<AuthCubit>(context)
-                              .userData!
-                              .data!
-                              .id!,
-                        );
-                        if (success) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Bookmarked successfully'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Already in your bookmarks'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      },
-                      // child: const Icon(Icons.bookmark),
-                    ),
-                    const SizedBox(width: 20),
-                    FloatingActionButton.extended(
-                      heroTag: null,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/chat', arguments: {
-                          'sellerId': sellerId,
-                          'buyerId': BlocProvider.of<AuthCubit>(context)
-                              .userData!
-                              .data!
-                              .id,
-                          'bookId': bookId,
-                        });
-                      },
-                      label: const Text("Chat"),
-                      icon: const Icon(Icons.chat),
-                    ),
-                    const SizedBox(width: 20),
-                    FloatingActionButton.extended(
-                      heroTag: null,
-                      onPressed: () async {
-                        await launchUrlString('tel:$phoneNumber');
-                      },
-                      label: const Text("Call"),
-                      icon: const Icon(Icons.phone),
-                    ),
-                  ],
-                ),
-              )
-            : FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/login');
-                },
-                label: const Text('Login to contact the owner'),
-                icon: const Icon(Icons.chat),
-              );
-      },
     );
   }
 }
@@ -515,9 +487,9 @@ class BookDetailsWidget extends StatelessWidget {
                             '${arguments.reviewsAvgRating?.toStringAsFixed(2) ?? '0'}⭐',
                         title: 'Rating',
                       ),
-                      const BookDetailsInfo(
-                        value: '289',
-                        title: 'Pages',
+                      BookDetailsInfo(
+                        value: 'Address',
+                        title: arguments.user!.location!,
                       ),
                       BookDetailsInfo(
                         value: arguments.category!.name!,

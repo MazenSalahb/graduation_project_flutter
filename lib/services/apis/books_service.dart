@@ -213,4 +213,23 @@ class BooksServiceApi {
       return [];
     }
   }
+
+  Future<bool> markAsSold({required num bookId, required String token}) async {
+    try {
+      final response = await dio.put('$baseUrl/books/sold/$bookId',
+          options: Options(responseType: ResponseType.json, headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          }));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      log(e.response!.data['message'].toString());
+      return false;
+    }
+  }
 }

@@ -125,7 +125,7 @@ class BookmarkWidget extends StatelessWidget {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: bookmark.book!.image!,
-                    height: 150,
+                    // height: 150,
                     width: 100,
                     fit: BoxFit.cover,
                   ),
@@ -140,7 +140,7 @@ class BookmarkWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
+                            width: MediaQuery.of(context).size.width * 0.4,
                             child: Text(
                               bookmark.book!.title!,
                               maxLines: 2,
@@ -149,7 +149,6 @@ class BookmarkWidget extends StatelessWidget {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          // const SizedBox(width: 5),
                           IconButton(
                             onPressed: () async {
                               final bool removed =

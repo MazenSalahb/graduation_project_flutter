@@ -8,6 +8,32 @@ import 'package:graduation_project/services/apis/baseurl.dart';
 class ChatService {
   final dio = Dio();
 
+  Future<List<ChatModel>> getUserChats({required num userId}) async {
+    try {
+      Response response = await dio.get('$baseUrl/chats/user/$userId',
+          options: Options(
+            headers: {
+              // 'Authorization': 'Bearer $token',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          ));
+      if (response.statusCode == 200) {
+        List<ChatModel> chats = [];
+        for (var chat in response.data) {
+          chats.add(ChatModel.fromJson(chat));
+        }
+        return chats;
+      } else {
+        log(response.data.toString());
+        return [];
+      }
+    } on DioException catch (e) {
+      log(e.message.toString());
+      return [];
+    }
+  }
+
   Future<List<ChatModel>> getUserBuyingChats({required num userId}) async {
     try {
       Response response = await dio.get('$baseUrl/chats/userBuying/$userId',
@@ -171,6 +197,27 @@ class ChatService {
     } on DioException catch (e) {
       log(e.message.toString());
       return [];
+    }
+  }
+
+  Future<bool> deleteChat({required num chatId, required String token}) async {
+    try {
+      Response response = await dio.delete('$baseUrl/chats/$chatId',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          ));
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      log(e.message.toString());
+      return false;
     }
   }
 }

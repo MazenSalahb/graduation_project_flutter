@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 20,
               ),
               const BooksCategory(
-                title: "Books To Deal With",
+                title: "Books For Deal",
                 isSwap: true,
               ),
               BooksList(
