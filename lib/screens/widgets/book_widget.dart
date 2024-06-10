@@ -42,29 +42,56 @@ class BookWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Hero(
-                  tag: book.id!,
-                  child: CachedNetworkImage(
-                    imageUrl: book.image!,
-                    height: isSwapBook ? 240 : 140,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Theme.of(context).colorScheme.surface,
-                      highlightColor:
-                          Theme.of(context).colorScheme.surfaceVariant,
-                      child: Container(
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Hero(
+                      tag: book.id!,
+                      child: CachedNetworkImage(
+                        imageUrl: book.image!,
                         height: isSwapBook ? 240 : 140,
                         width: double.infinity,
-                        color: Colors.grey,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Theme.of(context).colorScheme.surface,
+                          highlightColor: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
+                          child: Container(
+                            height: isSwapBook ? 240 : 140,
+                            width: double.infinity,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
                   ),
-                ),
+                  Builder(
+                    builder: (context) {
+                      if (book.subscription != null &&
+                          DateTime.parse(book.subscription!.endDate!)
+                              .isAfter(DateTime.now()) &&
+                          book.subscription?.status == 'active') {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          margin: const EdgeInsets.only(left: 5, top: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text('Featured'),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 5),

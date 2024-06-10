@@ -65,12 +65,11 @@ class StartScreen extends StatelessWidget {
                     Navigator.pushNamed(context, "/get-started");
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(
                         const Color.fromARGB(255, 207, 147, 146)),
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 8)),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    padding: WidgetStateProperty.all(const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 8)),
+                    shape: WidgetStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(11))),
                   ),
                   child: const Text(

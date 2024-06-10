@@ -11,6 +11,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  // ignore: prefer_typing_uninitialized_variables
   var future;
 
   @override

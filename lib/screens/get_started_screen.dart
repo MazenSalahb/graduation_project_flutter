@@ -40,12 +40,12 @@ class GetStartedScreen extends StatelessWidget {
                       Navigator.pushNamed(context, "/register");
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                           const Color.fromARGB(255, 207, 147, 146)),
-                      padding: MaterialStateProperty.all(
+                      padding: WidgetStateProperty.all(
                           const EdgeInsets.symmetric(
                               horizontal: 118, vertical: 8)),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(11))),
                     ),
                     child: const Text(
@@ -61,12 +61,12 @@ class GetStartedScreen extends StatelessWidget {
                       Navigator.pushNamed(context, "/login");
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                           const Color.fromARGB(255, 207, 147, 146)),
-                      padding: MaterialStateProperty.all(
+                      padding: WidgetStateProperty.all(
                           const EdgeInsets.symmetric(
                               horizontal: 125, vertical: 8)),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(11))),
                     ),
                     child: const Text(

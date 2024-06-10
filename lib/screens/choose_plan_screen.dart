@@ -10,7 +10,10 @@ class ChoosePlanScreen extends StatefulWidget {
   State<ChoosePlanScreen> createState() => _ChoosePlanScreenState();
 }
 
-List<String> options = ["205", "380"];
+List<String> options = [
+  "plan1",
+  "plan2",
+];
 
 class _ChoosePlanScreenState extends State<ChoosePlanScreen> {
   // final _formKey = GlobalKey<FormState>();
